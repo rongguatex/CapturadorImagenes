@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="700.0" maxWidth="1100.0" minHeight="700.0" minWidth="1258.0" prefHeight="700.0" prefWidth="1258.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.guatex.capturadorimagen.controladores.CamaraController">
+    <children>
+        <VBox alignment="CENTER" prefHeight="700.0" prefWidth="1100.0">
+            <children>
+                <TitledPane fx:id="tpCaptura" prefWidth="900.0" text="Realizar Captura">
+                    <content>
+                        <HBox alignment="CENTER" prefWidth="1258.0">
+                            <children>
+                                <VBox alignment="CENTER" prefHeight="737.0" prefWidth="205.0">
+                                    <children>
+                                        <Button fx:id="btnBuscarCamara" mnemonicParsing="false" prefWidth="175.0" styleClass="nbutton" text="Buscar Camara">
+                                            <graphic>
+                                                <!--                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="/com/guatex/proyectobase/imagenes/Buscar.png" />
+                                                    </image>
+                                                </ImageView>-->
+                                            </graphic>
+                                            <VBox.margin>
+                                                <Insets top="10.0" />
+                                            </VBox.margin>
+                                        </Button>
+                                        <Button fx:id="btnCapturar" mnemonicParsing="false" prefWidth="175.0" styleClass="capturebutton" text="Capturar Foto">
+                                            <graphic>
+                                                <!--                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="/com/guatex/proyectobase/imagenes/camara.png" />
+                                                    </image>
+                                                </ImageView>-->
+                                            </graphic>
+                                            <VBox.margin>
+                                                <Insets top="10.0" />
+                                            </VBox.margin>
+                                        </Button>
+                                        <Label fx:id="lbCaptura" alignment="CENTER" contentDisplay="CENTER" text="Capturas tomadas">
+                                            <VBox.margin>
+                                                <Insets top="25.0" />
+                                            </VBox.margin>
+                                        </Label>
+                                        <TableView fx:id="tblCapturas1" prefHeight="150.0" prefWidth="208.0">
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                            <padding>
+                                                <Insets right="10.0" />
+                                            </padding>
+                                        </TableView>
+                                        <Button fx:id="btnEliminar1" mnemonicParsing="false" prefWidth="175.0" styleClass="deletebutton" text="Eliminar imagen">
+                                            <VBox.margin>
+                                                <Insets top="10.0" />
+                                            </VBox.margin>
+                                        </Button>
+                                        <Button fx:id="btnCerrar1" mnemonicParsing="false" prefWidth="175.0" styleClass="nbutton" text="Regresar">
+                                            <VBox.margin>
+                                                <Insets top="10.0" />
+                                            </VBox.margin>
+                                        </Button>
+                                    </children>
+
+                                                            
+                                </VBox>
+                                <HBox alignment="CENTER" prefHeight="600.0" prefWidth="900.0">
+                                    <ImageView fx:id="imgWebCamCapturedImage" fitHeight="600.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
+                                    
+                                    </ImageView>
+                                </HBox>
+                            </children>
+                        </HBox>
+                    </content>
+                </TitledPane>
+                <TitledPane fx:id="tpModificar" prefWidth="900.0" text="Modificar Captura">
+                    <content>
+                        <HBox alignment="CENTER">
+                            <children>
+                                <VBox alignment="CENTER" prefHeight="751.0" prefWidth="205.0">
+                                    <children>
+                                        <Button fx:id="btnRotarLeft" mnemonicParsing="false" prefWidth="175.0" styleClass="nbutton" text="Rotar izquierda">
+                                            <graphic>
+                                                <!--                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="/com/guatex/proyectobase/imagenes/ic_izq.png" />
+                                                    </image>
+                                                </ImageView>-->
+                                            </graphic>
+                                        </Button>
+                                        <Button fx:id="btnRotarRight" mnemonicParsing="false" prefWidth="175.0" styleClass="nbutton" text="Rotar derecha" textOverrun="CLIP">
+                                            <graphic>
+                                                <!--                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="/com/guatex/proyectobase/imagenes/ic_der.png" />
+                                                    </image>
+                                                </ImageView>-->
+                                            </graphic>
+                                            <VBox.margin>
+                                                <Insets top="10.0" />
+                                            </VBox.margin>
+                                        </Button>
+                                        <Button fx:id="btnVolverCapturar" mnemonicParsing="false" prefWidth="175.0" styleClass="recapturebutton" text="Volver a capturar">
+                                            <graphic>
+                                                <!--                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="/com/guatex/proyectobase/imagenes/camara.png" />
+                                                    </image>
+                                                </ImageView>-->
+                                            </graphic>
+                                            <VBox.margin>
+                                                <Insets top="10.0" />
+                                            </VBox.margin>
+                                        </Button>
+                                        <Button fx:id="btnGuardar" mnemonicParsing="false" prefWidth="175.0" styleClass="capturebutton" text="Guardar captura">
+                                            <graphic>
+                                                <!--                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="/com/guatex/proyectobase/imagenes/Diskette.png" />
+                                                    </image>
+                                                </ImageView>-->
+                                            </graphic>
+                                            <VBox.margin>
+                                                <Insets top="10.0" />
+                                            </VBox.margin>
+                                        </Button>
+                                        <Label alignment="CENTER" contentDisplay="CENTER" text="Capturas tomadas">
+                                            <VBox.margin>
+                                                <Insets top="25.0" />
+                                            </VBox.margin>
+                                        </Label>
+                                        <TableView fx:id="tblCapturas2" prefHeight="150.0" prefWidth="208.0">
+                                            <padding>
+                                                <Insets right="10.0" />
+                                            </padding>
+                                        </TableView>
+                                        <Button fx:id="btnEliminar2" mnemonicParsing="false" prefWidth="175.0" styleClass="deletebutton" text="Eliminar imagen">
+                                            <graphic>
+                                                <!--                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="/com/guatex/proyectobase/imagenes/Basurero.png" />
+                                                    </image>
+                                                </ImageView>-->
+                                            </graphic>
+                                            <VBox.margin>
+                                                <Insets top="10.0" />
+                                            </VBox.margin>
+                                        </Button>
+                                        <Button fx:id="btnCerrar2" mnemonicParsing="false" prefWidth="175.0" styleClass="nbutton" text="Regresar">
+                                            <VBox.margin>
+                                                <Insets top="25.0" />
+                                            </VBox.margin>
+                                        </Button>
+                                    </children>
+                                </VBox>
+                                <!--                                <HBox alignment="CENTER" prefHeight="600.0" prefWidth="900.0">
+                <children >
+                    <Pane >
+                        <children>                                           
+                            <Group fx:id="gImg">
+                                <children>-->
+                                <HBox alignment="CENTER" prefHeight="600.0" prefWidth="900.0">
+                                    <ImageView fx:id="ImgVisualizador" fitHeight="600.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" />
+                                </HBox>
+                                <!--                                                    </children>
+                                                </Group>
+                                            </children>                                            
+                                        </Pane>
+                                    </children>
+                                </HBox>-->
+                            </children>
+                        </HBox>
+                    </content>
+                </TitledPane>
+            </children>
+        </VBox>
+    </children>
+    <stylesheets>
+        <URL value="@../css/camara.css" />
+        <URL value="@../css/Botones.css" />
+        <URL value="@../css/Tablas.css" />
+    </stylesheets>
+</AnchorPane>

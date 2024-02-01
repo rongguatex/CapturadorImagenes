@@ -1,0 +1,160 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 2/02/2017, 10:13:07 AM
+    Author     : JLAM
+*/
+
+.rdbutton{
+    -fx-background-color: #81cbf0;
+    -fx-background-radius: 50pt;
+    -fx-border-radius:50pt; 
+    -fx-border-width: 0;
+    -fx-padding: 0pt;
+    -fx-text-fill:#ffffff;
+}
+
+.rdbutton:hover{
+    -fx-background-color: #a0defd;
+    -fx-border-color:#3BAAE3;
+    -fx-border-width: 0 2 2 0;
+}
+
+.btnTransparente {
+    -fx-background-color: transparent;
+    -fx-color: #a0defd;
+}
+
+.btnTransparente:hover {
+    -fx-background-color: #81cbf0;
+    -fx-border-radius:5pt; 
+    -fx-font:bolder 11pt "Calibri";    
+    -fx-text-fill:#014567;
+}
+
+
+.rdbutton2{
+    -fx-background-color: #e4edfc;
+    -fx-background-radius: 50pt;
+    -fx-border-radius:50pt; 
+    -fx-border-width: 0;
+    -fx-padding: 0pt;
+    -fx-text-fill:#71c4ff;
+}
+
+.rdbutton2:hover{
+    -fx-background-color: #ffffff;
+}
+
+.rdbutton3{
+    -fx-background-color: #81cbf0;
+    -fx-background-radius: 50pt;
+    -fx-border-radius:50pt; 
+    -fx-border-width: 0;
+    -fx-padding: 1pt;
+    -fx-text-fill:#014567;
+}
+
+.rdbutton3:hover{
+    -fx-background-color: #a0defd;
+}
+.rdbutton3:focused{
+    -fx-background-color: #a0defd;
+    -fx-border-color:#3BAAE3;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
+
+.nbutton{
+    -fx-background-color: #81cbf0;
+    -fx-background-radius: 5pt;
+    -fx-border-radius:5pt; 
+    -fx-border-width: 0;
+    -fx-padding: 7pt;
+    -fx-font:bolder 11pt "Calibri";    
+    -fx-text-fill:#014567;
+}
+
+.nbutton:hover{
+    -fx-background-color: #a0defd;
+    -fx-border-color:#3BAAE3;
+}
+
+.nbutton:focused{
+    -fx-background-color: #a0defd;
+    -fx-border-color:#3BAAE3;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
+
+.tbutton{
+    -fx-background-color:transparent;
+    -fx-font: bolder 12pt "Calibri";
+    -fx-padding: 0;
+    -fx-text-fill:#014567;
+}
+
+.tbutton:hover{
+    -fx-text-fill:#2779AA;
+}
+
+
+.pbutton{
+    -fx-background-radius: 50pt;
+    -fx-border-radius:50pt; 
+    -fx-border-width: 0;
+    -fx-padding: 0pt;
+    -fx-opacity: 0.7;
+    -fx-font: bolder 12pt "Calibri";
+}
+
+.pbutton:hover{
+    -fx-opacity: 1;
+}
+
+.pbutton:focused{
+    -fx-opacity: 1;
+}
+
+.rdtoggle {
+    -fx-background-color:#cccccc;
+    -fx-background-radius: 50pt;
+    -fx-border-radius:50pt; 
+    -fx-border-width: 0;
+    -fx-padding: 0pt;
+}
+
+.rdtoggle:selected {
+    -fx-background-color: #81cbf0;
+    -fx-text-fill: -fx-light-text-color;
+}
+
+.btnSalirDavid {
+    -fx-background-color: #00cc2c;
+    -fx-background-radius: 5pt;
+    -fx-border-radius:5pt; 
+    -fx-border-width: 0;
+    -fx-padding: 2pt;
+    -fx-font:bolder 11pt "Calibri";    
+    -fx-text-fill:#014567;
+}
+.btnSalirDavid:focused {
+    -fx-background-color: #ED6A5E;
+    -fx-border-color:#3BAAE3;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
+.btnAlternativo {
+    -fx-background-color: #195DEE;
+    -fx-background-radius: 5pt;
+    -fx-border-radius:5pt; 
+    -fx-border-width: 0;
+    -fx-padding: 8pt;
+    -fx-font:bolder 11pt "Calibri";    
+    -fx-text-fill:#FFFFFF;
+}
+
+

@@ -1,0 +1,77 @@
+/* 
+    Created on : 22/01/2024
+    Author     : RGALICIA
+*/
+
+.lbcolor {
+    -fx-background-color: #b5f5b7;
+    -fx-background-radius: 5pt;
+    -fx-border-radius:5pt; 
+    -fx-border-width: 0;
+    -fx-padding: 2pt;
+    -fx-font:bolder 15pt "Calibri";    
+    -fx-text-fill:#014567;
+}
+
+.recapturebutton{
+    -fx-background-color: #fede6d;
+    -fx-background-radius: 5pt;
+    -fx-border-radius:5pt; 
+    -fx-border-width: 0;
+    -fx-padding: 7pt;
+    -fx-font:bolder 11pt "Calibri";    
+    -fx-text-fill:#014567;
+}
+
+.recapturebutton:hover{
+    -fx-background-color: #eacc5b;
+    -fx-border-color:#3BAAE3;
+}
+
+.recapturebutton:focused{
+    -fx-background-color: #eacc5b;
+    -fx-border-color:#3BAAE3;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
+.capturebutton{
+    -fx-background-color: #b1d182;
+    -fx-background-radius: 5pt;
+    -fx-border-radius:5pt; 
+    -fx-border-width: 0;
+    -fx-padding: 7pt;
+    -fx-font:bolder 11pt "Calibri";    
+    -fx-text-fill:#014567;
+}
+
+.capturebutton:hover{
+    -fx-background-color: #ABC270;
+    -fx-border-color:#3BAAE3;
+}
+
+.capturebutton:focused{
+    -fx-background-color: #ABC270;
+    -fx-border-color:#3BAAE3;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
+.deletebutton{
+    -fx-background-color: #de7c78;
+    -fx-background-radius: 5pt;
+    -fx-border-radius:5pt; 
+    -fx-border-width: 0;
+    -fx-padding: 7pt;
+    -fx-font:bolder 11pt "Calibri";    
+    -fx-text-fill:#014567;
+}
+
+.deletebutton:hover{
+    -fx-background-color: #f99b99;
+    -fx-border-color:#3BAAE3;
+}
+
+.deletebutton:focused{
+    -fx-background-color: #f99b99;
+    -fx-border-color:#3BAAE3;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
