@@ -31,7 +31,7 @@ public class Start extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        
+
         Parameters params = getParameters();
 
         ControlImagenes controlImage = new ControlImagenes();

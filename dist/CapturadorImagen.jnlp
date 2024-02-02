@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="CapturadorImagen.jar" size="33766" download="eager" />
+    <jar href="CapturadorImagen.jar" size="33630" download="eager" />
     <jar href="lib\EasyReport.jar" size="943009" download="eager" />
     <jar href="lib\EasyReport2.jar" size="942993" download="eager" />
     <jar href="lib\GuatexCLI20210610.jar" size="10235697" download="eager" />

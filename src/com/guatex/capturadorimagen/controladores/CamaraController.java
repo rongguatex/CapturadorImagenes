@@ -106,7 +106,6 @@ public class CamaraController implements Initializable {
 
         controlImage.setNoDPI(Parametros.DOCUMENTO);
         controlImage.setCantidadImagenes(Parametros.CANTIDAD_IMG);
-        
 
         System.out.println("docuemnto: " + controlImage.getNoDPI());
         System.out.println("cantidad: " + controlImage.getCantidadImagenes());
@@ -237,8 +236,7 @@ public class CamaraController implements Initializable {
                     try {
 
                         if ((horaActual.toSecondOfDay() - segundos) > 2) {
-                            stopCamera = true;
-                            webCam.close();
+
                             Platform.runLater(() -> {
                                 Alert alerta2 = new Alert(Alert.AlertType.ERROR);
                                 alerta2.setTitle("Cámara");
@@ -248,10 +246,11 @@ public class CamaraController implements Initializable {
                                 Stage stage = (Stage) btnCerrar1.getScene().getWindow();
                                 stage.close();
                             });
+
+                            disposeWebCamCamera();
+
                             return null;
                         }
-                        
-                        
 
                         if ((grabbedImage = webCam.getImage()) != null) {
 
@@ -273,7 +272,6 @@ public class CamaraController implements Initializable {
 
                             grabbedImage.flush();
                         } else {
-                            disposeWebCamCamera();
 
                             Platform.runLater(() -> {
                                 Alert alerta2 = new Alert(Alert.AlertType.ERROR);
@@ -285,7 +283,7 @@ public class CamaraController implements Initializable {
                                 Stage stage = (Stage) btnCerrar1.getScene().getWindow();
                                 stage.close();
 
-                                respuestaCamara("N");
+                                disposeWebCamCamera();
                                 System.exit(0);
                             });
                         }
@@ -304,8 +302,14 @@ public class CamaraController implements Initializable {
     }
 
     protected void disposeWebCamCamera() {
+
         stopCamera = true;
-        webCam.close();
+
+        if (webCam != null) {
+            webCam.close();
+        }
+
+        respuestaCamara("N");
     }
 
     private void iniciaTablaCaptura1() {
@@ -410,6 +414,8 @@ public class CamaraController implements Initializable {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+
+            //Se necesita para hacer una pausa en la secuencia de la cámara y de esta manera poder ir a la pantalla de modificar.
             stopCamera = true;
 
             btnCapturar.setVisible(false);
@@ -466,6 +472,7 @@ public class CamaraController implements Initializable {
 
         btnVolverCapturar.setOnMouseClicked(e -> {
 
+            //---------------------------Deshabilita los botones de tpModificar--------------------------------
             tpModificar.setCollapsible(true);
             tpModificar.setExpanded(false);
             tpModificar.setDisable(true);
@@ -474,7 +481,15 @@ public class CamaraController implements Initializable {
             tpCaptura.setDisable(false);
             tpCaptura.setExpanded(true);
 
-            BuscarCamara();
+            //---------------------------Habilita los botones de tpCapturar--------------------------------
+            btnBuscarCamara.setVisible(opciones.isEmpty());
+            btnCapturar.setVisible(!opciones.isEmpty());
+            tblCapturas1.setVisible(!opciones.isEmpty());
+            btnEliminar1.setVisible(!opciones.isEmpty());
+            lbCaptura.setVisible(!opciones.isEmpty());
+
+            startWebCamStream();
+//            BuscarCamara();
             imgWebCamCapturedImage.setVisible(true);
 
         });
@@ -546,9 +561,9 @@ public class CamaraController implements Initializable {
             if (validacionCapturas()) {
                 stopCamera = true;
                 webCam.close();
+
                 Stage stage = (Stage) btnCerrar1.getScene().getWindow();
                 stage.close();
-//                System.exit(0);
             }
 
         });
@@ -558,13 +573,11 @@ public class CamaraController implements Initializable {
             if (validacionCapturas()) {
                 stopCamera = true;
                 webCam.close();
+
                 Stage stage = (Stage) btnCerrar2.getScene().getWindow();
                 stage.close();
-//                System.exit(0);
             }
-//            else {
-//                System.exit(0);
-//            }
+
         });
 
     }
@@ -637,14 +650,10 @@ public class CamaraController implements Initializable {
 
         if (listaCapturas.isEmpty() || listaCapturas.size() == 0) {
 
-//            imageCap = false;
-            stopCamera = true;
-//            webCam.isOpen() ? webCam.close() : webCam = null;
-
             Stage stage = (Stage) btnCerrar1.getScene().getWindow();
             stage.close();
 
-            respuestaCamara("N");
+            disposeWebCamCamera();
             System.exit(0);
         } else if (listaCapturas.size() >= controlImage.getCantidadImagenes()) {
 
@@ -682,7 +691,7 @@ public class CamaraController implements Initializable {
             if (action.get() == ButtonType.OK) {
                 respuesta = true;
 
-                respuestaCamara("N");
+                disposeWebCamCamera();
             }
         }
 
@@ -695,23 +704,12 @@ public class CamaraController implements Initializable {
 
         try {
 
-//            File archivoS = new File("C:\\JPOSFiles\\Camara\\S.txt");
-//            File archivoN = new File("C:\\JPOSFiles\\Camara\\N.txt");
-//
-//            archivoN.delete();
-//            archivoS.delete();
             String ruta = "C:\\JPOSFiles\\Camara\\" + str + ".txt";
-//            String contenido = "Contenido de ejemplo";
 
             File file = new File(ruta);
-            // Si el archivo no existe es creado
-//            if (!file.exists()) {
+            
             file.createNewFile();
-//            }
-//            FileWriter fw = new FileWriter(file);
-//            BufferedWriter bw = new BufferedWriter(fw);
-////            bw.write(contenido);
-//            bw.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
