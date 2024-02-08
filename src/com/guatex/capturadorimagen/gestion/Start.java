@@ -14,14 +14,17 @@ import java.sql.Connection;
 import java.util.Map;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 /**
  *
@@ -44,9 +47,19 @@ public class Start extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/guatex/capturadorimagen/formularios/Camara.fxml"));
         Parent root = loader.load();
 
+        Scene scene = new Scene(root, 1100.0, 700);
+
         stage.setTitle("Capturador de imágenes.");
         stage.initStyle(StageStyle.TRANSPARENT);
-        stage.setScene(new Scene(root, 1100.0, 700));
+        stage.setScene(scene);
+
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                event.consume();
+            }
+        });
+
         stage.show();
     }
 
@@ -54,16 +67,7 @@ public class Start extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
-//        if (args.length <= 1) { //si no hay parámetros      
-//            System.out.println("Faltan parámetros");
-//            System.exit(0);
-//        } else {
-//            System.out.println("args.length: " + args.length);
         Application.launch(args);
-//            System.exit(0);
-//        }
-
     }
 
 }

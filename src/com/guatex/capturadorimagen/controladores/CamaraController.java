@@ -16,6 +16,7 @@ import com.guatex.capturadorimagen.entidades.ControlImagenes;
 import com.guatex.capturadorimagen.entidades.ImagenInfo;
 import com.guatex.capturadorimagen.entidades.WebCamInfo;
 import com.guatex.capturadorimagen.gestion.AdministracionCarpetas;
+import com.guatex.capturadorimagen.gestion.GrabarLog;
 import com.guatex.capturadorimagen.gestion.Parametros;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -95,6 +96,7 @@ public class CamaraController implements Initializable {
     private boolean selecciontabla = false;
     private String nombreImagen = "";
     private ControlImagenes controlImage = new ControlImagenes();
+    boolean procesoCerrar = false;
 
     /**
      * Initializes the controller class.
@@ -102,15 +104,8 @@ public class CamaraController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        System.out.println("------------------------------llegan los datos------------------------------");
-
         controlImage.setNoDPI(Parametros.DOCUMENTO);
         controlImage.setCantidadImagenes(Parametros.CANTIDAD_IMG);
-
-        System.out.println("docuemnto: " + controlImage.getNoDPI());
-        System.out.println("cantidad: " + controlImage.getCantidadImagenes());
-
-        System.out.println("--------------------------------------------------------------------------------");
 
         opciones = FXCollections.observableArrayList();
         btnCapturar.setVisible(!opciones.isEmpty());
@@ -165,9 +160,11 @@ public class CamaraController implements Initializable {
 
         for (Webcam webcam : Webcam.getWebcams()) {
             WebCamInfo webCamInfo = new WebCamInfo();
+
             webCamInfo.setWebCamIndex(webCamCounter);
             webCamInfo.setWebCamName(webcam.getName());
             opciones.add(webCamInfo);
+
             webCamCounter++;
         }
 
@@ -178,9 +175,20 @@ public class CamaraController implements Initializable {
         lbCaptura.setVisible(!opciones.isEmpty());
 
         if (!opciones.isEmpty()) {
-            System.out.println("WebCam Index: " + opciones.get(0).getWebCamIndex() + ": WebCam Name:" + opciones.get(0).getWebCamName());
-            iniciaCamaraWeb(opciones.get(0).getWebCamIndex());
+
+            GrabarLog.getInstance().grabaLogFileAdministrador("WebCam index: " + opciones.get(0).getWebCamIndex() + " - WebCam Name: " + opciones.get(0).getWebCamName());
+
+            try {
+                iniciaCamaraWeb(opciones.get(0).getWebCamIndex());
+            } catch (Exception e) {
+                GrabarLog.getInstance().grabaLogFileAdministrador("Error al llamar al metodo inicaCamaraWeb: " + e.getMessage());
+                disposeWebCamCamera();
+                System.exit(0);
+            }
+
         } else if (opciones.size() == 0) {
+
+            GrabarLog.getInstance().grabaLogFileAdministrador("No hay cámara disponible");
             Platform.runLater(() -> {
                 Alert alerta2 = new Alert(Alert.AlertType.INFORMATION);
                 alerta2.setTitle("Cámara");
@@ -189,127 +197,137 @@ public class CamaraController implements Initializable {
                 alerta2.showAndWait();
             });
         }
+
     }
 
     protected void iniciaCamaraWeb(final int webCamIndex) {
-        Task<Void> webCamTask = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                if (webCam != null) {
-                    disposeWebCamCamera();
+        try {
+            Task<Void> webCamTask = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    if (webCam != null) {
+                        disposeWebCamCamera();
+                        System.exit(0);
+                    }
+
+                    webCam = Webcam.getWebcams().get(webCamIndex);
+
+                    Dimension[] nonStandardResolutions = new Dimension[]{
+                        WebcamResolution.PAL.getSize(),
+                        WebcamResolution.QHD.getSize(),
+                        new Dimension(1600, 800),
+                        new Dimension(700, 300),};
+
+                    webCam.setCustomViewSizes(nonStandardResolutions);
+                    webCam.setViewSize(WebcamResolution.QHD.getSize());
+
+                    webCam.open();
+                    GrabarLog.getInstance().grabaLogFileAdministrador("webcam open ");
+
+                    startWebCamStream();
+                    return null;
                 }
-
-                webCam = Webcam.getWebcams().get(webCamIndex);
-
-                Dimension[] nonStandardResolutions = new Dimension[]{
-                    WebcamResolution.PAL.getSize(),
-                    WebcamResolution.QHD.getSize(),
-                    new Dimension(1600, 800),
-                    new Dimension(700, 300),};
-
-                webCam.setCustomViewSizes(nonStandardResolutions);
-                webCam.setViewSize(WebcamResolution.QHD.getSize());
-
-                webCam.open();
-
-                startWebCamStream();
-                return null;
-            }
-        };
-        Thread webCamThread = new Thread(webCamTask);
-        webCamThread.setDaemon(true);
-        webCamThread.start();
+            };
+            Thread webCamThread = new Thread(webCamTask);
+            webCamThread.setDaemon(true);
+            webCamThread.start();
+        } catch (Exception e) {
+            GrabarLog.getInstance().grabaLogFileAdministrador("iniciaCamaraWeb - Ocurrio un error al inciar la cámara web: " + e.getMessage());
+            disposeWebCamCamera();
+            System.exit(0);
+        }
     }
 
     protected void startWebCamStream() {
         stopCamera = false;
-        Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
 
-                final AtomicReference<WeakReference<Image>> ref = new AtomicReference<>();
+        try {
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
 
-                LocalTime horaActual = LocalTime.now();
-                int segundos = horaActual.toSecondOfDay();
+                    final AtomicReference<WeakReference<Image>> ref = new AtomicReference<>();
 
-                while (!stopCamera) {
-                    try {
+                    LocalTime horaActual = LocalTime.now();
+                    int segundos = horaActual.toSecondOfDay();
 
-                        if ((horaActual.toSecondOfDay() - segundos) > 2) {
+                    while (!stopCamera) {
+                        try {
 
-                            Platform.runLater(() -> {
-                                Alert alerta2 = new Alert(Alert.AlertType.ERROR);
-                                alerta2.setTitle("Cámara");
-                                alerta2.setContentText("La cámara ha sido desonectada, asegurese que la cámara se encuentre conectada al equipo."
-                                        + "\n\nSi el problema persiste por favor contacte a soporte.");
-                                alerta2.showAndWait();
-                                Stage stage = (Stage) btnCerrar1.getScene().getWindow();
-                                stage.close();
-                            });
+                            if ((horaActual.toSecondOfDay() - segundos) > 2) {
 
-                            disposeWebCamCamera();
-
-                            return null;
-                        }
-
-                        if ((grabbedImage = webCam.getImage()) != null) {
-
-                            final Image mainiamge = SwingFXUtils.toFXImage(grabbedImage, null);
-                            ref.set(new WeakReference<Image>(SwingFXUtils.toFXImage(grabbedImage, null)));
-                            grabbedImage.flush();
-
-                            Platform.runLater(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    imageProperty.set(mainiamge);
-                                    Image image = ref.get().get();
-                                    if (image != null) {
-                                        imageProperty.set(image);
-                                    }
-                                }
-                            });
-
-                            grabbedImage.flush();
-                        } else {
-
-                            Platform.runLater(() -> {
-                                Alert alerta2 = new Alert(Alert.AlertType.ERROR);
-                                alerta2.setTitle("Cámara");
-                                alerta2.setContentText("La cámara ha sido desonectada, asegurese que la cámara se encuentre conectada al equipo."
-                                        + "\n\nSi el problema persiste por favor contacte a soporte.");
-                                alerta2.showAndWait();
-
-                                Stage stage = (Stage) btnCerrar1.getScene().getWindow();
-                                stage.close();
-
+                                GrabarLog.getInstance().grabaLogFileAdministrador("No se reconoce la cámara después de dos segundos.");
                                 disposeWebCamCamera();
-                                System.exit(0);
-                            });
+
+                                Platform.runLater(() -> {
+                                    Alert alerta2 = new Alert(Alert.AlertType.ERROR);
+                                    alerta2.setTitle("Cámara");
+                                    alerta2.setContentText("La cámara ha sido desonectada, asegurese que la cámara se encuentre conectada al equipo."
+                                            + "\n\nSi el problema persiste por favor contacte a soporte.");
+                                    alerta2.showAndWait();
+
+                                    Stage stage = (Stage) btnCerrar1.getScene().getWindow();
+                                    stage.close();
+                                });
+                            }
+
+                            if ((grabbedImage = webCam.getImage()) != null) {
+
+                                final Image mainiamge = SwingFXUtils.toFXImage(grabbedImage, null);
+                                ref.set(new WeakReference<Image>(SwingFXUtils.toFXImage(grabbedImage, null)));
+                                grabbedImage.flush();
+
+                                Platform.runLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        imageProperty.set(mainiamge);
+                                        Image image = ref.get().get();
+                                        if (image != null) {
+                                            imageProperty.set(image);
+                                        }
+                                    }
+                                });
+
+                                grabbedImage.flush();
+                            } else {
+
+                                GrabarLog.getInstance().grabaLogFileAdministrador("La cámara ha sido desconectada de manera imprevista.");
+                                disposeWebCamCamera();
+
+                                Platform.runLater(() -> {
+                                    Alert alerta2 = new Alert(Alert.AlertType.ERROR);
+                                    alerta2.setTitle("Cámara");
+                                    alerta2.setContentText("La cámara ha sido desonectada, asegurese que la cámara se encuentre conectada al equipo."
+                                            + "\n\nSi el problema persiste por favor contacte a soporte.");
+                                    alerta2.showAndWait();
+
+                                    Stage stage = (Stage) btnCerrar1.getScene().getWindow();
+                                    stage.close();
+
+                                });
+                            }
+
+                        } catch (Exception e) {
+                            GrabarLog.getInstance().grabaLogFileAdministrador(" -----> startWebCamStream - Ocurrio un error al obtener la imagen: " + e.getMessage());
+                            disposeWebCamCamera();
+                            System.exit(0);
                         }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
+
+                    return null;
                 }
-                return null;
-            }
-        };
-        Thread th = new Thread(task);
-        th.setDaemon(true);
-        th.start();
-        imgWebCamCapturedImage.imageProperty().bind(imageProperty);
-    }
+            };
 
-    protected void disposeWebCamCamera() {
-
-        stopCamera = true;
-
-        if (webCam != null) {
-            webCam.close();
+            Thread th = new Thread(task);
+            th.setDaemon(true);
+            th.start();
+            imgWebCamCapturedImage.imageProperty().bind(imageProperty);
+        } catch (Exception e) {
+            GrabarLog.getInstance().grabaLogFileAdministrador("Ocurrio un error en startWebCamStream: " + e.getMessage());
+            disposeWebCamCamera();
+            System.exit(0);
         }
-
-        respuestaCamara("N");
     }
 
     private void iniciaTablaCaptura1() {
@@ -404,8 +422,7 @@ public class CamaraController implements Initializable {
                 file = new File("\\" + ruta + "\\" + controlImage.getNoDPI() + "_" + (contador) + ".jpg");
             }
 
-            System.out.println("ruta... " + file.toString());
-
+//            System.out.println("ruta... " + file.toString());
             //File file = new File("\\" + ruta + controlImage.getNoDPI() + "_" + (contador) + ".jpg");
             try {
                 FileOutputStream fi = new FileOutputStream(file.toString());
@@ -511,6 +528,7 @@ public class CamaraController implements Initializable {
                     Alerta.showAndWait();
                 });
             } else {
+                GrabarLog.getInstance().grabaLogFileAdministrador("Toma guardada correctamente: [" + nombreImagen + "]");
                 CapturasInfo captura = new CapturasInfo();
                 captura.setCapturaName(nombreImagen);
 
@@ -558,28 +576,51 @@ public class CamaraController implements Initializable {
 
         btnCerrar1.setOnMouseClicked(e -> {
 
-            if (validacionCapturas()) {
+            if (listaCapturas.isEmpty() || listaCapturas.size() == 0) {
+                GrabarLog.getInstance().grabaLogFileAdministrador("El listado de imagenes está vacío.");
+                disposeWebCamCamera();
+                procesoCerrar = true;
+            } else if (validacionCapturas()) {
                 stopCamera = true;
-                webCam.close();
+                respuestaCamara("S");
+                GrabarLog.getInstance().grabaLogFileAdministrador("Cerrar botón 1, validación de capturas correcta, se procede a cerrar el programa.");
+            }
 
+            if (procesoCerrar) {
+                GrabarLog.getInstance().grabaLogFileAdministrador("Se procede a cerrar el capturador de imagenes.");
                 Stage stage = (Stage) btnCerrar1.getScene().getWindow();
                 stage.close();
+                System.exit(0);
             }
 
         });
 
         btnCerrar2.setOnMouseClicked(e -> {
 
-            if (validacionCapturas()) {
+            if (listaCapturas.isEmpty() || listaCapturas.size() == 0) {
+                GrabarLog.getInstance().grabaLogFileAdministrador("-> El listado de imagenes está vacío.");
+                disposeWebCamCamera();
+                procesoCerrar = true;
+            } else if (validacionCapturas()) {
                 stopCamera = true;
-                webCam.close();
+                respuestaCamara("S");
+                GrabarLog.getInstance().grabaLogFileAdministrador("Cerrar botón 2, validación de capturas correcta, se procede a cerrar el programa.");
+            }
 
+            if (procesoCerrar) {
+                GrabarLog.getInstance().grabaLogFileAdministrador("-> Se procede a cerrar el capturador de imagenes.");
                 Stage stage = (Stage) btnCerrar2.getScene().getWindow();
                 stage.close();
+                System.exit(0);
             }
 
         });
 
+    }
+
+    protected void disposeWebCamCamera() {
+        stopCamera = true;
+        respuestaCamara("N");
     }
 
     private void RotarImagen(int rotar) {
@@ -606,6 +647,7 @@ public class CamaraController implements Initializable {
             newImage.flush();
             CargarImagen();
         } catch (Exception ex) {
+            GrabarLog.getInstance().grabaLogFileAdministrador("Error al rotar imagen: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
@@ -622,13 +664,11 @@ public class CamaraController implements Initializable {
                 } else {
                     ruta = new File(adFolder.CreaCarpetaGuia(nombreImagen.substring(0, nombreImagen.indexOf("_"))) + "\\" + nombreImagen + ".jpg");
                 }
-//                File ruta = new File(this.ruta + nombreImagen + ".jpg");
+
                 Image imagen = new Image(ruta.toURI().toString());
                 ImgVisualizador.setImage(imagen);
-                if (imagen.isBackgroundLoading()) {
-//                    imageCap = true;
-                }
             } catch (Exception ex) {
+                GrabarLog.getInstance().grabaLogFileAdministrador("Ocurrio un error al cargar la imagen: " + ex.getMessage());
                 ex.printStackTrace();
             }
         });
@@ -638,24 +678,16 @@ public class CamaraController implements Initializable {
     private boolean validacionCapturas() {
         boolean respuesta = false;
 
-        ImagenInfo control = new ImagenInfo();
+        if (listaCapturas.size() >= controlImage.getCantidadImagenes()) {
 
-        for (CapturasInfo captura : listaCapturas) {
-            control.setDpi(controlImage.getNoDPI());
-            control.setNombre(captura.getCapturaName());
-            control.setRuta(ruta);
-            control.setOperador(Parametros.OPERADOR);
-            controlImage.getListadoCaptura().add(control);
-        }
-
-        if (listaCapturas.isEmpty() || listaCapturas.size() == 0) {
-
-            Stage stage = (Stage) btnCerrar1.getScene().getWindow();
-            stage.close();
-
-            disposeWebCamCamera();
-            System.exit(0);
-        } else if (listaCapturas.size() >= controlImage.getCantidadImagenes()) {
+            for (CapturasInfo captura : listaCapturas) {
+                ImagenInfo control = new ImagenInfo();
+                control.setDpi(controlImage.getNoDPI());
+                control.setNombre(captura.getCapturaName());
+                control.setRuta(ruta);
+                control.setOperador(Parametros.OPERADOR);
+                controlImage.getListadoCaptura().add(control);
+            }
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle(null);
@@ -666,20 +698,22 @@ public class CamaraController implements Initializable {
             if (action.get() == ButtonType.OK) {
 
                 try (Connection conLocal = new Conexion().getConexion()) {
-                    DatosCamara datos = new DatosCamara();
 
                     for (ImagenInfo imagen : controlImage.getListadoCaptura()) {
-                        datos.guardarCapturaImagen(conLocal, control);
+                        DatosCamara datos = new DatosCamara();
+                        datos.guardarCapturaImagen(conLocal, imagen);
                     }
 
-                    respuestaCamara("S");
+                    respuesta = true;
+                    procesoCerrar = true;
 
                 } catch (Exception e) {
+                    GrabarLog.getInstance().grabaLogFileAdministrador("Ocurrio un error al presionar el boton OK al finalizar proceso.[" + e.getMessage() + "]");
+                    disposeWebCamCamera();
+                    procesoCerrar = true;
                 }
-
-//                imageCap = true;
-                respuesta = true;
             }
+
         } else {
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -689,8 +723,7 @@ public class CamaraController implements Initializable {
             Optional<ButtonType> action = alert.showAndWait();
 
             if (action.get() == ButtonType.OK) {
-                respuesta = true;
-
+                procesoCerrar = true;
                 disposeWebCamCamera();
             }
         }
@@ -707,7 +740,7 @@ public class CamaraController implements Initializable {
             String ruta = "C:\\JPOSFiles\\Camara\\" + str + ".txt";
 
             File file = new File(ruta);
-            
+
             file.createNewFile();
 
         } catch (Exception e) {

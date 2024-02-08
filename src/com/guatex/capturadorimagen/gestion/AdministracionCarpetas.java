@@ -19,6 +19,23 @@ public class AdministracionCarpetas {
     private static String UNIDADC = "C:";
     private static String RUTA_PRIMARIA = UNIDADC + "\\JPOSFiles\\";
     private static String RUTA_IMAGENES = RUTA_PRIMARIA + "\\imagenes\\";
+    private static String RUTA_LOGS = RUTA_PRIMARIA + "\\RECOLECCION\\LOGS\\";
+
+    public static String getUNIDADC() {
+        return UNIDADC;
+    }
+
+    public static String getRUTA_PRIMARIA() {
+        return RUTA_PRIMARIA;
+    }
+
+    public static String getRUTA_IMAGENES() {
+        return RUTA_IMAGENES;
+    }
+
+    public static String getRUTA_LOGS() {
+        return RUTA_LOGS;
+    }
 
     private final static String IMAGENES = RUTA_IMAGENES;
     private String FECHA = DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDateTime.now());
