@@ -12,6 +12,7 @@ import com.guatex.capturadorimagen.entidades.ControlImagenes;
 import java.io.File;
 import java.sql.Connection;
 import java.util.Map;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -21,10 +22,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 
 /**
  *
@@ -43,13 +46,13 @@ public class Start extends Application {
         Parametros.DOCUMENTO = params.getNamed().get("documento");
         Parametros.CANTIDAD_IMG = Integer.parseInt(params.getNamed().get("cantidad"));
         Parametros.OPERADOR = params.getNamed().get("operador");
-        
+
         AdministracionCarpetas.crearCarpetasyArchivos();
         ObtenerDataBase.obtenerConfiguracion();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/guatex/capturadorimagen/formularios/Camara.fxml"));
         Parent root = loader.load();
-        
+
         Scene scene = new Scene(root, 1100.0, 700);
         stage.setTitle("Capturador de imágenes.");
         stage.initStyle(StageStyle.TRANSPARENT);
@@ -62,7 +65,20 @@ public class Start extends Application {
             }
         });
 
+        stage.setAlwaysOnTop(true);
+
+        stage.setOnShown(ev -> {
+            PauseTransition pt = new PauseTransition(Duration.seconds(3));
+            pt.setOnFinished(e -> {
+                System.out.println("oki pasaron los segundos");
+                stage.setAlwaysOnTop(false);
+            });
+
+            pt.play();
+        });
+
         stage.show();
+        
     }
 
     /**
