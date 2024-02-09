@@ -6,6 +6,7 @@
 package com.guatex.capturadorimagen.datos;
 
 import com.guatex.capturadorimagen.entidades.ImagenInfo;
+import com.guatex.capturadorimagen.gestion.GrabarLog;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -27,7 +28,7 @@ public class DatosCamara {
             ps.setString(4, captura.getOperador());
             ps.executeUpdate();
         } catch (SQLException ex) {
-            System.out.println("Ocurrio un error al insertar en la db: \n [" + ex.getMessage() + "]");
+            GrabarLog.getInstance().grabaLogFileAdministrador("Ocurrio un error al insertar en la db: \n [" + ex.getMessage() + "]");
         }
 
     }

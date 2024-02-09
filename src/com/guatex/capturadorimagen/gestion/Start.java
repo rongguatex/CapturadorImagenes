@@ -43,12 +43,14 @@ public class Start extends Application {
         Parametros.DOCUMENTO = params.getNamed().get("documento");
         Parametros.CANTIDAD_IMG = Integer.parseInt(params.getNamed().get("cantidad"));
         Parametros.OPERADOR = params.getNamed().get("operador");
+        
+        AdministracionCarpetas.crearCarpetasyArchivos();
+        ObtenerDataBase.obtenerConfiguracion();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/guatex/capturadorimagen/formularios/Camara.fxml"));
         Parent root = loader.load();
-
+        
         Scene scene = new Scene(root, 1100.0, 700);
-
         stage.setTitle("Capturador de imágenes.");
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);

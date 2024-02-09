@@ -5,6 +5,8 @@
  */
 package com.guatex.capturadorimagen.conexion;
 
+import com.guatex.capturadorimagen.gestion.GrabarLog;
+import com.guatex.capturadorimagen.gestion.ObtenerDataBase;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -18,20 +20,21 @@ import java.sql.Connection;
  * @author RGALICIA
  */
 public class Conexion {
+
     Connection con;
     private final String url;
     private final String puerto;
     private final String usuario;
     private final String password;
-    
+
     public Conexion() {
         con = null;
         this.url = "";
-        this.puerto = "1521";
-        this.usuario = "operaciones";
-        this.password = "gtxgtx01";
+        this.puerto = ObtenerDataBase.getPUERTODB();
+        this.usuario = ObtenerDataBase.getUSUARIODB();
+        this.password = ObtenerDataBase.getPASSWORDDB();
     }
-    
+
     public Conexion(String direccion, String puerto, String usuario, String password) {
         this.con = null;
         this.url = "jdbc:oracle:thin:@" + direccion;
@@ -39,28 +42,28 @@ public class Conexion {
         this.usuario = usuario;
         this.password = password;
     }
-    
+
     public Connection getConexion() {
         if (this.url.isEmpty()) {
             try {
                 System.out.println("Obteniendo conexion de datasource");
                 con = DataSource.getDataSource().getConnection();
             } catch (SQLException ex) {
-                ex.printStackTrace();
-//                WriteLog.grabarError(Conexion.class, ex.getMessage());
+                GrabarLog.getInstance().grabaLogFileAdministrador("Error: " + ex.getMessage());
             }
         } else {
             try {
+                System.out.println("getconnection");
                 Class.forName("oracle.jdbc.driver.OracleDriver");
                 con = DriverManager.getConnection(url + ":" + puerto + ":xe", usuario, password);
             } catch (SQLException ex) {
-//                WriteLog.grabarError(Conexion.class, ex.getMessage());
+                GrabarLog.getInstance().grabaLogFileAdministrador("Ocurrio un error en getConexion - SQLException: " + ex.getMessage());
             } catch (ClassNotFoundException ex) {
-//                WriteLog.grabarError(Conexion.class, ex.getMessage());
+                GrabarLog.getInstance().grabaLogFileAdministrador("Ocurrio un error en getConexion - ClassNotFoundException: " + ex.getMessage());
             }
         }
 
         return con;
     }
-    
+
 }

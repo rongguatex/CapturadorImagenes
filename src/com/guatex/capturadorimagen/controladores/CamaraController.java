@@ -698,9 +698,9 @@ public class CamaraController implements Initializable {
             if (action.get() == ButtonType.OK) {
 
                 try (Connection conLocal = new Conexion().getConexion()) {
+                    DatosCamara datos = new DatosCamara();
 
                     for (ImagenInfo imagen : controlImage.getListadoCaptura()) {
-                        DatosCamara datos = new DatosCamara();
                         datos.guardarCapturaImagen(conLocal, imagen);
                     }
 

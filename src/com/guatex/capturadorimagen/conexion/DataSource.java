@@ -5,6 +5,7 @@
  */
 package com.guatex.capturadorimagen.conexion;
 
+import com.guatex.capturadorimagen.gestion.ObtenerDataBase;
 import java.sql.SQLException;
 import java.util.Properties;
 import oracle.jdbc.pool.OracleConnectionCacheManager;
@@ -32,12 +33,12 @@ public class DataSource {
 //            prop.setProperty("AbandonedConnectionTimeout", "60");
 //            prop.setProperty("PropertyCheckInterval", "60");
 
-            ods.setURL("jdbc:oracle:thin:@" + "192.168.14.117" + ":" + "1521" + ":xe");
-            ods.setUser("operaciones");
-            ods.setPassword("gtxgtx01");
+            ods.setURL("jdbc:oracle:thin:@" + ObtenerDataBase.getDIRECCIONDB() + ":" + ObtenerDataBase.getPUERTODB() + ":xe");
+            ods.setUser(ObtenerDataBase.getUSUARIODB());
+            ods.setPassword(ObtenerDataBase.getPASSWORDDB());
             ods.setConnectionCachingEnabled(true);
             ods.setConnectionCacheProperties(prop);
-            ods.setConnectionCacheName("CapturadorImagenesCache");
+            ods.setConnectionCacheName("JPOSCache");
             
         } catch (SQLException ex) {
             ex.printStackTrace();
