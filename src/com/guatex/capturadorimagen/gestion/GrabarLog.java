@@ -5,6 +5,7 @@
  */
 package com.guatex.capturadorimagen.gestion;
 
+import com.guatex.fel.logs.Loggs;
 import java.io.IOException;
 import java.util.Date;
 import java.text.DateFormat;
@@ -13,6 +14,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.RollingFileAppender;
+import org.apache.log4j.varia.Roller;
 
 /**
  *

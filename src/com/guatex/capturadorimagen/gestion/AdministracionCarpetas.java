@@ -6,8 +6,10 @@
 package com.guatex.capturadorimagen.gestion;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  *

@@ -5,23 +5,32 @@
  */
 package com.guatex.capturadorimagen.gestion;
 
+import com.guatex.capturadorimagen.conexion.Conexion;
+import com.guatex.capturadorimagen.controladores.CamaraController;
+import com.guatex.capturadorimagen.datos.ObtenerPrmtros;
 import com.guatex.capturadorimagen.entidades.ControlImagenes;
+import java.io.File;
+import java.sql.Connection;
+import java.util.Map;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 /**
- * Capturador de Imagenes v1 - 09/02/2024
- * 
- * @param Los parametros obtenidos se obtienen desde la aplicación que realiza el llamado a esta aplicación.
- * 
+ *
  * @author RGALICIA
  */
 public class Start extends Application {
@@ -56,8 +65,6 @@ public class Start extends Application {
             }
         });
 
-        //Permite que el stage se coloque frente por 3 segundos y luego se desbloquee para que el usuario 
-        //vea siempre vea esta pantalla sobre cualquier otra pestaña.
         stage.setAlwaysOnTop(true);
 
         stage.setOnShown(ev -> {
