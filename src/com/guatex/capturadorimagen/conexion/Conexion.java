@@ -7,11 +7,7 @@ package com.guatex.capturadorimagen.conexion;
 
 import com.guatex.capturadorimagen.gestion.GrabarLog;
 import com.guatex.capturadorimagen.gestion.ObtenerDataBase;
-import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
 
@@ -43,6 +39,11 @@ public class Conexion {
         this.password = password;
     }
 
+    /**
+     * Se crea conexión a db por medio de datasource o bien por DriverManager.
+     * 
+     * @return Connection type
+     */
     public Connection getConexion() {
         if (this.url.isEmpty()) {
             try {

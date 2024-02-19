@@ -6,9 +6,9 @@
             <file>file:/C:/WORKSPACE/PORTALES/PORTALES/CapturadorImagen/src/com/guatex/capturadorimagen/formularios/Camara.fxml</file>
             <file>file:/C:/WORKSPACE/PORTALES/PORTALES/CapturadorImagen/src/com/guatex/capturadorimagen/gestion/Start.java</file>
             <file>file:/C:/WORKSPACE/PORTALES/PORTALES/CapturadorImagen/src/com/guatex/capturadorimagen/gestion/GrabarLog.java</file>
+            <file>file:/C:/WORKSPACE/PORTALES/PORTALES/CapturadorImagen/src/com/guatex/capturadorimagen/gestion/ObtenerDataBase.java</file>
             <file>file:/C:/WORKSPACE/PORTALES/PORTALES/CapturadorImagen/src/com/guatex/capturadorimagen/controladores/CamaraController.java</file>
-            <file>file:/C:/WORKSPACE/PORTALES/PORTALES/CapturadorImagen/src/com/guatex/capturadorimagen/gestion/AdministracionCarpetas.java</file>
-            <file>file:/C:/WORKSPACE/PORTALES/PORTALES/CapturadorImagen/src/com/guatex/capturadorimagen/gestion/WriteLogs.java</file>
+            <file>file:/C:/WORKSPACE/PORTALES/PORTALES/CapturadorImagen/src/com/guatex/capturadorimagen/conexion/DataSource.java</file>
         </group>
     </open-files>
 </project-private>
